@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Add new control record{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('control.min') }}
+
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <main role="main">
+
+        <section class="jumbotron text-center">
+            <div class="container">
+
+            </div>
+        </section>
+
+        <div class="album py-5 bg-light">
+            <div class="container">
+                {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+
+    </main>
+
+{% endblock %}

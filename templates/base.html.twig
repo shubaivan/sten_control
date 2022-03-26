@@ -7,13 +7,28 @@
         {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
         {% block stylesheets %}
             {{ encore_entry_link_tags('app') }}
+
+            {{ encore_entry_link_tags('index/css/global.min') }}
+
         {% endblock %}
 
         {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
+{#            {{ encore_entry_script_tags('app') }}#}
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        {% block body %}
+            <header>
+                <div class="collapse bg-dark" id="navbarHeader">
+                    <div class="container">
+
+                    </div>
+                </div>
+
+            </header>
+
+
+
+        {% endblock %}
     </body>
 </html>
