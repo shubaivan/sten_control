@@ -29,6 +29,12 @@ class ControlType extends AbstractType
                     'placeholder' => '063 123 45 67'
                 ]
             ])
+            ->add('car_number', TextType::class, [
+                'label' => 'Номер машины ',
+                'attr' => [
+                    'placeholder' => 'CA 1122 CA'
+                ]
+            ])
             ->add('save', SubmitType::class, ['label' => 'Create']);
     }
 

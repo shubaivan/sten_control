@@ -15,6 +15,7 @@ class ControlFixtures extends Fixture
             ->setFisrtName('TestFirstName1')
             ->setLastName('TestLastName1')
             ->setMobile('0631111111')
+            ->setCarNumber('CA1111CA')
             ->setDeviceHash('#111');
          $manager->persist($control);
 

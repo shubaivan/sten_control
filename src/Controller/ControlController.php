@@ -28,7 +28,7 @@ class ControlController extends AbstractController
      */
     public function index(): Response
     {
-        $keys = ['fisrt_name', 'last_name', 'device_hash', 'mobile'];
+        $keys = Control::getMap();
 
         $dataTableColumnData = [];
 

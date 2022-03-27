@@ -12,9 +12,10 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Control
 {
+    private static $map = ['fisrt_name', 'last_name', 'device_hash', 'mobile', 'car_number'];
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -34,6 +35,12 @@ class Control
      * @ContainsAlphanumeric()
      */
     private $last_name;
+
+    /**
+     * @ORM\Column(type="string", length=255, options={"defaul: ''"})
+     * @Assert\NotBlank()
+     */
+    private $car_number;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -125,5 +132,31 @@ class Control
     {
         $this->last_name = $last_name;
         return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCarNumber()
+    {
+        return $this->car_number;
+    }
+
+    /**
+     * @param mixed $car_number
+     * @return Control
+     */
+    public function setCarNumber($car_number)
+    {
+        $this->car_number = $car_number;
+        return $this;
+    }
+
+    /**
+     * @return string[]
+     */
+    public static function getMap(): array
+    {
+        return self::$map;
     }
 }

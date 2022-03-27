@@ -3,6 +3,7 @@
 namespace App\Controller\Rest;
 
 use App\Document\AdrecordProduct;
+use App\Entity\Control;
 use App\Repository\ControlRepository;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Nelmio\ApiDocBundle\Annotation\Operation;
@@ -46,7 +47,7 @@ class ApiControlController extends AbstractRestController
         return [
             "draw" => $request->request->get('draw'),
             "recordsTotal" => $totalCount,
-            "recordsFiltered"=> $bySearchData['count'] ? : $totalCount,
+            "recordsFiltered" => $bySearchData['count'] ?: $totalCount,
             'data' => $bySearchData['data']
         ];
     }
@@ -67,7 +68,7 @@ class ApiControlController extends AbstractRestController
      */
     public function getDataTableParamsAction(Request $request): array
     {
-        $keys = ['fisrt_name', 'last_name', 'device_hash', 'mobile'];
+        $keys = Control::getMap();
 
         $dataTableColumnData = [];
 
