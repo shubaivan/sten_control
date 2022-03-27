@@ -20,7 +20,9 @@ class ControlType extends AbstractType
             ->add('last_name', TextType::class, [
                 'label' => 'Фамилия',
             ])
-            ->add('device_hash')
+            ->add('device_hash', TextType::class, [
+                'label' => 'Хэш устройства',
+            ])
             ->add('mobile', TextType::class, [
                 'label' => 'UA mobile number ',
                 'attr' => [
