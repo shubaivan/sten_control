@@ -34,7 +34,7 @@ class ContainsAlphanumericValidator extends ConstraintValidator
             // ...
         }
 
-        if (!preg_match('/^[a-zA-Z0-9]+$/', $value, $matches)) {
+        if (!preg_match('/^[А-Яа-яA-Za-z0-9\s_-]+$/u', $value, $matches)) {
             // the argument must be a string or an object implementing __toString()
             $this->context->buildViolation($constraint->message)
                 ->setParameter('{{ string }}', $value)
