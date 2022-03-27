@@ -20,18 +20,20 @@
         </section>
 
         <div class="album py-5 bg-light">
+
             <div class="container">
+
                 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
                 {{ form_widget(form) }}
                 {{ form_end(form) }}
+
+                <button type="button" class="btn btn-outline-success">
+                    <a href="{{ path('app_control') }}">
+                        Cancel
+                    </a>
+                </button>
             </div>
         </div>
-
-        <button type="button" class="btn btn-outline-success">
-            <a href="{{ path('app_control') }}">
-                Cancel
-            </a>
-        </button>
     </main>
 
 {% endblock %}

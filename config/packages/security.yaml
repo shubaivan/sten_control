@@ -5,7 +5,6 @@ security:
         Symfony\Component\Security\Core\User\InMemoryUser:
             algorithm: plaintext # disable hashing (only do this in tests!)
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         users_in_memory:
@@ -19,8 +18,10 @@ security:
         main:
             lazy: true
             provider: users_in_memory
-            http_basic:
-                provider: users_in_memory
+            form_login:
+                # "login" is the name of the route created previously
+                login_path: login
+                check_path: login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -31,6 +32,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, role: ROLE_SERVICE }
         # - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }
