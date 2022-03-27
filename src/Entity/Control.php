@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ControlRepository;
+use App\Validator\ContainsAlphanumeric;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -22,6 +23,7 @@ class Control
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(min=3)
+     * @ContainsAlphanumeric()
      */
     private $fisrt_name;
 
@@ -29,6 +31,7 @@ class Control
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(min=3)
+     * @ContainsAlphanumeric()
      */
     private $last_name;
 
@@ -41,6 +44,7 @@ class Control
     /**
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
+     * @Assert\Regex(pattern="/^[0-9]{10}+$/")
      */
     private $mobile;
 
@@ -94,6 +98,13 @@ class Control
      */
     public function setMobile($mobile)
     {
+        if (strlen($mobile)) {
+            $preg_match_all = preg_match_all('/[0-9]+/', $mobile, $m);
+            if ($preg_match_all) {
+                $mobile = implode("", array_shift($m));
+            }
+        }
+
         $this->mobile = $mobile;
         return $this;
     }
@@ -115,6 +126,4 @@ class Control
         $this->last_name = $last_name;
         return $this;
     }
-
-
 }
