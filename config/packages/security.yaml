@@ -10,7 +10,7 @@ security:
         users_in_memory:
             memory:
                 users:
-                    "%env(USER)%": { password: "%env(PASSWORD)%", roles: [ 'ROLE_SERVICE' ] }
+                    "%env(APP_USER)%": { password: "%env(APP_PASS)%", roles: [ 'ROLE_SERVICE' ] }
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
