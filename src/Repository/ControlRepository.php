@@ -6,6 +6,8 @@ use App\Entity\Control;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Query\ResultSetMapping;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -45,32 +47,82 @@ class ControlRepository extends ServiceEntityRepository
         }
     }
 
-    // /**
-    //  * @return Control[] Returns an array of Control objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return float|int|mixed|string
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function fetchTotalCount()
     {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('c.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $queryBuilder = $this->createQueryBuilder('c');
 
-    /*
-    public function findOneBySomeField($value): ?Control
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $queryBuilder
+            ->select('COUNT(DISTINCT c.id)');
+
+        return $queryBuilder->getQuery()->getSingleScalarResult();
     }
-    */
+
+    /**
+     * @param string $query
+     * @return float|int|mixed|string
+     */
+    public function fetchBySearchData(array $params)
+    {
+        $rsm = new ResultSetMappingBuilder(
+            $this->_em,
+            ResultSetMappingBuilder::COLUMN_RENAMING_INCREMENT
+        );
+        $rsm->addRootEntityFromClassMetadata(Control::class, 'c');
+
+        $sql = "select " . $rsm->generateSelectClause() . " from control c";
+        $sqlCount = "select COUNT(DISTINCT c.id) from control c";
+
+        if (isset($params['search']['value']) && strlen($params['search']['value'])) {
+            $query = $params['search']['value'];
+            $query = (function ($q) {
+                $pieces = explode(' ', $q);
+                if (count($pieces) === 1) {
+                    return $q . ':*';
+                }
+                return join(':*&', $pieces);
+            })($query);
+            $tsquery = " where to_tsvector(c.last_name || ' ' || c.fisrt_name || ' ' || c.mobile) @@ to_tsquery('$query')";
+            $sql .= $tsquery;
+            $sqlCount .= $tsquery;
+        }
+        if (isset($params['columns']) && is_array($params['columns'])) {
+            foreach ($params['columns'] as $column) {
+                if (isset($column['search']['value'])
+                    && isset($column['data'])
+                    && strlen($column['search']['value'])
+                ) {
+                    $value = $column['search']['value'];
+                    $column = $column['data'];
+                    $where = '
+                        where '.$column.' LIKE \'%' .$value .'%\'
+                    ';
+                    $sql .= $where;
+                    $sqlCount .= $where;
+                }
+            }
+        }
+        $count = $this->_em->getConnection()->executeQuery($sqlCount)->fetchOne();;
+        if (isset($params['length'])) {
+            $length = $params['length'];
+            $sql .= "
+                        limit $length 
+                    ";
+        }
+
+        if (isset($params['start'])) {
+            $offset = $params['start'];
+            $sql .= "
+                        offset $offset 
+                    ";
+        }
+
+        $qb = $this->_em->createNativeQuery($sql, $rsm);
+
+        return ['data' => $qb->getResult(), 'count' => $count];
+    }
 }

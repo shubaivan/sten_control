@@ -9,10 +9,13 @@
 import './styles/app.css';
 
 // start the Stimulus application
-import './bootstrap';
+// import './bootstrap';
 
-// // loads the jquery package from node_modules
+// loads the jquery package from node_modules
 // import $ from 'jquery';
+
+const $  = require( 'jquery' );
+global.$ = global.jQuery = $;
 //
 // $(document).ready(function () {
 //     $('body').prepend('<h1>Hello</h1>');

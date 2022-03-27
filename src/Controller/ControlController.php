@@ -28,8 +28,18 @@ class ControlController extends AbstractController
      */
     public function index(): Response
     {
+        $keys = ['fisrt_name', 'last_name', 'device_hash', 'mobile'];
+
+        $dataTableColumnData = [];
+
+        array_map(function ($k) use (&$dataTableColumnData) {
+            $dataTableColumnData[] = ['data' => $k];
+        }, $keys);
         return $this->render('control/index.html.twig', [
             'controller_name' => 'ControlController',
+            'th_keys' => $keys,
+            'dataTbaleKeys' => $dataTableColumnData,
+            'separate_filter_column' => ['device_hash'],
         ]);
     }
 

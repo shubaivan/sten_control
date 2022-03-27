@@ -14,9 +14,9 @@ class ControlType extends AbstractType
     {
         $builder
             ->add('fisrt_name')
+            ->add('last_name')
             ->add('device_hash')
             ->add('mobile')
-            ->add('last_name')
 
             ->add('save', SubmitType::class, ['label' => 'Create'])
 

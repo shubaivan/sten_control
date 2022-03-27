@@ -4,9 +4,10 @@
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('control.min') }}
 
 {% endblock %}
+
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
 
 {% block body %}
     {{ parent() }}
