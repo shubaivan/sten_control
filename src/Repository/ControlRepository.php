@@ -86,7 +86,7 @@ class ControlRepository extends ServiceEntityRepository
                 }
                 return join(':*&', $pieces);
             })($query);
-            $tsquery = " where to_tsvector(c.last_name || ' ' || c.fisrt_name || ' ' || c.mobile || ' ' || c.car_number) @@ to_tsquery('$query')";
+            $tsquery = " where to_tsvector(c.last_name || ' ' || c.fisrt_name || ' ' || c.mobile || ' ' || c.car_numberxit) @@ to_tsquery('$query')";
             $sql .= $tsquery;
             $sqlCount .= $tsquery;
         }
