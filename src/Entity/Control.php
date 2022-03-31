@@ -5,14 +5,20 @@ namespace App\Entity;
 use App\Repository\ControlRepository;
 use App\Validator\ContainsAlphanumeric;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity(repositoryClass=ControlRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Control
 {
-    private static $map = ['fisrt_name', 'last_name', 'device_hash', 'mobile', 'car_number'];
+    private static $map = ['fisrt_name', 'last_name', 'device_hash', 'mobile', 'car_number', "created"];
+
+    use TimestampableEntity;
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
@@ -158,5 +164,16 @@ class Control
     public static function getMap(): array
     {
         return self::$map;
+    }
+
+    /**
+     * @return integer
+     * @JMS\VirtualProperty()
+     * @JMS\SerializedName("created")
+     * @JMS\Type("string")
+     */
+    public function getCreatedAtValue()
+    {
+        return $this->createdAt->format("Y-m-d H:i:s");
     }
 }
